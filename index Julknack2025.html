@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome to the Matrix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 1;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+    }
+
+    .overlay h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .overlay p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .overlay a {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      font-size: 1.2rem;
+      color: #00ff00;
+      text-decoration: none;
+      border: 2px solid #00ff00;
+      border-radius: 8px;
+      transition: 0.3s ease;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .overlay a:hover {
+      background-color: #1101011a;
+      color: black;
+      text-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="matrixCanvas"></canvas>
+
+<div class="overlay">
+  <h1>Welcome to the Julknäck 2025</h1>
+  <p>Ledtråd: "The Matrix is everywhere flow the green binary digits."</p>
+   <p>av Simon Hällström</p>
+  <a href="https://www.imdb.com/title/tt0133093/" target="_blank">Enter</a>
+</div>
+
+<script>
+  const canvas = document.getElementById("matrixCanvas");
+  const ctx = canvas.getContext("2d");
+
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+
+  const fontSize = 16;
+  const columns = Math.floor(width / fontSize);
+  const drops = Array.from({ length: columns }, () => ({
+    y: Math.random() * height / fontSize,
+    speed: Math.random() * 0.5 + 0.1
+  }));
+
+  const binary = "01000111 01110010 01100001 01110100 01110100 01101001 01110011 00100001 00100000 01001110 01110101 00100000 01101000 01100001 01110010 00100000 01100100 01110101 00100000 01101100 11000011 10110110 01110011 01110100 00100000 01001101 01101001 01110100 01110100 00100000 01101010 01110101 01101100 00100000 01101011 01101110 11000011 10100100 01100011 01101011 00100000 00110010 00110000 00110010 00110101 00100000 01101101 01100001 01101001 01101100 01100001 00100000 01101101 01101001 01100111 00100000 01110000 11000011 10100101 00100000 01110011 01101001 01101101 01101111 01101110 01101000 01100001 01101100 01101100 01110011 01110100 01110010 01101111 01101101 01000000 01101111 01110101 01110100 01101100 01101111 01101111 01101011 00101110 01100011 01101111 01101101 00100000 01101111 01101101 00100000 01101110 01101001 00100000 01110011 01101011 01110101 01101100 01101100 01100101 00100000 01110110 01101001 01101100 01101100 00100000 01100001 01101110 01110011 01110100 11000011 10100100 01101100 01101100 01100001 00100000 01101101 01101001 01100111";
+  
+
+  function draw() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < columns; i++) {
+      const x = i * fontSize;
+      const drop = drops[i];
+      const y = drop.y * fontSize;
+
+      const char = binary[Math.floor(Math.random() * 2)];
+      ctx.fillStyle = "#00ff00";
+      ctx.fillText(char, x, y);
+
+      drop.y += drop.speed;
+
+      if (drop.y * fontSize > height) {
+        drop.y = 0;
+        drop.speed = Math.random() * 0.5 + 0.1;
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+
+  window.addEventListener("resize", () => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  });
+</script>
+
+</body>
+</html>
